@@ -1,4 +1,5 @@
 import React from 'react';
+import './Todo.css';
 
 export default class Todo extends React.Component {
 
@@ -10,7 +11,7 @@ export default class Todo extends React.Component {
                     onClick={this.props.toggleComplete}> 
                     {this.props.todo.text}
                 </div>  
-                <button className="btn btn-danger" onClick={this.props.onDelete}>X</button>
+                <button className="btn-sm btn-danger" onClick={this.props.onDelete}>X</button>
             </div>
         )
     }
