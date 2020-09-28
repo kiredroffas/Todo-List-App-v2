@@ -40,7 +40,7 @@ export default class TodoForm extends React.Component {
                     onChange={this.handleChange} 
                     placeholder="Enter a todo item">
                 </input>
-                <button onClick={this.handleSubmit}>Add Todo</button>
+                <button className="btn btn-primary" onClick={this.handleSubmit}>Add Todo</button>
             </form>
             
         )
