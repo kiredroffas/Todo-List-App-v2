@@ -14,6 +14,7 @@ export default class TodoList extends React.Component {
         this.addTodo = this.addTodo.bind(this);
         this.toggleComplete = this.toggleComplete.bind(this);
         this.updateTodoToShow = this.updateTodoToShow.bind(this);
+        this.handleDeleteTodo = this.handleDeleteTodo.bind(this);
     }
     
     
@@ -43,6 +44,12 @@ export default class TodoList extends React.Component {
         })
     }
 
+    handleDeleteTodo(id) {
+        this.setState({
+            todos: this.state.todos.filter(todo => todo.id !== id)
+        })
+    }
+
     updateTodoToShow(s) {
         this.setState({
             todoToShow: s
@@ -69,6 +76,7 @@ export default class TodoList extends React.Component {
                     <Todo 
                         key={todo.id} 
                         toggleComplete={() => this.toggleComplete(todo.id)} 
+                        onDelete={() => this.handleDeleteTodo(todo.id)}
                         todo={todo}
                     />
                 ))}
