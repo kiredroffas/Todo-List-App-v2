@@ -15,6 +15,7 @@ export default class TodoList extends React.Component {
         this.toggleComplete = this.toggleComplete.bind(this);
         this.updateTodoToShow = this.updateTodoToShow.bind(this);
         this.handleDeleteTodo = this.handleDeleteTodo.bind(this);
+        this.removeCompletedTodos = this.removeCompletedTodos.bind(this);
     }
     
     
@@ -47,6 +48,12 @@ export default class TodoList extends React.Component {
     handleDeleteTodo(id) {
         this.setState({
             todos: this.state.todos.filter(todo => todo.id !== id)
+        })
+    }
+
+    removeCompletedTodos() {
+        this.setState({
+            todos: this.state.todos.filter(todo => todo.complete === false)
         })
     }
 
@@ -88,6 +95,11 @@ export default class TodoList extends React.Component {
                     <button onClick={() => this.updateTodoToShow("active")}>active</button>
                     <button onClick={() => this.updateTodoToShow("complete")}>complete</button>
                 </div>
+                {this.state.todos.some(todo => todo.complete).length ? ( 
+                    <div>
+                        <button onClick={this.removeCompletedTodos}>remove all complete</button>
+                    </div> 
+                ) : null}
             </div>
             
         )
