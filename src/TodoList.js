@@ -1,8 +1,7 @@
 import React from 'react';
 import './TodoList.css';
 import TodoForm from './TodoForm.js';
-import Todo from './Todo.js';
-import shortid from 'shortid';
+import TodoItems from './TodoItems.js';
 
 export default class TodoList extends React.Component {
     constructor(props) {
@@ -121,39 +120,13 @@ export default class TodoList extends React.Component {
         return (
             <div>
                 <TodoForm onSubmit={this.addTodo}/>
-                <div>
-                    {todos.map(todo => (
-                        <ul key={shortid.generate()}>
-                            <li key={todo.id} style={{ textDecoration: todo.complete ? 'line-through' : "",
-                                backgroundColor: todo.complete ? '#b1daf0' : ""}} 
-                                onClick={() => this.toggleComplete(todo.id)}>
-                                <div>
-                                    {todo.text}
-                                    <button className="btn-sm btn-danger" onClick={() => this.handleDeleteTodo(todo.id)} style={{float: 'right'}}>X</button>
-                                </div>
-                            </li>
-                            <ul>
-                                {todo.subActivities.map(todo => (
-                                    <li key={todo.id} style={{ textDecoration: todo.complete ? 'line-through' : "",
-                                    backgroundColor: todo.complete ? '#b1daf0' : ""}} 
-                                    onClick={() => this.toggleSubComplete(todo.id)}>
-                                        <div>
-                                            {todo.text}
-                                            <button className="btn-sm btn-danger" onClick={() => this.handleDeleteSubTodo(todo.id)} style={{float: 'right'}}>X</button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                            {/* <Todo 
-                                key={todo.id} 
-                                toggleComplete={() => this.toggleComplete(todo.id)} 
-                                toggleSubItem={(id) => this.toggleSubComplete(id)}
-                                onDelete={() => this.handleDeleteTodo(todo.id)}
-                                todo={todo}
-                            /> */}
-                        </ul>
-                    ))}
-                </div>
+                <TodoItems 
+                    todos={todos} 
+                    onToggleComplete={(id) => this.toggleComplete(id)}
+                    onHandleDeleteTodo={(id) => this.handleDeleteTodo(id)}
+                    onToggleSubComplete={(subId) => this.toggleSubComplete(subId)}
+                    onHandleDeleteSubTodo={(subId) => this.handleDeleteSubTodo(subId)}
+                />
                 <div>
                     todos left: {this.state.todos.filter(todo => !todo.complete).length}
                 </div>
