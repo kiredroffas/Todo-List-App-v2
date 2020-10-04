@@ -2,6 +2,7 @@ import React from 'react';
 import './TodoList.css';
 import TodoForm from './TodoForm.js';
 import Todo from './Todo.js';
+import shortid from 'shortid';
 
 export default class TodoList extends React.Component {
     constructor(props) {
@@ -14,15 +15,19 @@ export default class TodoList extends React.Component {
 
         this.addTodo = this.addTodo.bind(this);
         this.toggleComplete = this.toggleComplete.bind(this);
+        this.toggleSubComplete = this.toggleSubComplete.bind(this);
         this.updateTodoToShow = this.updateTodoToShow.bind(this);
         this.handleDeleteTodo = this.handleDeleteTodo.bind(this);
+        this.handleDeleteSubTodo = this.handleDeleteSubTodo.bind(this);
         this.removeCompletedTodos = this.removeCompletedTodos.bind(this);
     }
     
     addTodo(todo) {
         this.setState(state => ({
             todos: [todo, ...state.todos]
-        }))
+        }), () => {
+            console.log(this.state.todos);
+        })
     }
 
     toggleComplete(id) {
@@ -44,10 +49,48 @@ export default class TodoList extends React.Component {
         }))
     }
 
+    toggleSubComplete(id) {
+        let todoCopy = this.state.todos.slice();
+        
+        for(let todo of todoCopy) {
+            console.log(todo)
+            for(let subTodo of todo.subActivities) {
+                console.log(subTodo.id)
+                if(subTodo.id === id) {
+                    subTodo.complete = !subTodo.complete;
+                    break;
+                }
+            }
+        }
+
+        this.setState({
+            todos: todoCopy
+        })
+    }
+
     handleDeleteTodo(id) {
         this.setState(state => ({
             todos: state.todos.filter(todo => todo.id !== id)
         }))
+    }
+
+    handleDeleteSubTodo(subId) {
+        let todoCopy = this.state.todos.slice();
+        
+        for(let todo of todoCopy) {
+            console.log(todo)
+            for(let [i, subTodo] of todo.subActivities.entries()) {
+                console.log(i,subTodo.id)
+                if(subTodo.id === subId) {
+                    todo.subActivities.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        this.setState({
+            todos: todoCopy
+        })
     }
 
     removeCompletedTodos() {
@@ -78,14 +121,39 @@ export default class TodoList extends React.Component {
         return (
             <div>
                 <TodoForm onSubmit={this.addTodo}/>
-                {todos.map(todo => (
-                    <Todo 
-                        key={todo.id} 
-                        toggleComplete={() => this.toggleComplete(todo.id)} 
-                        onDelete={() => this.handleDeleteTodo(todo.id)}
-                        todo={todo}
-                    />
-                ))}
+                <div>
+                    {todos.map(todo => (
+                        <ul key={shortid.generate()}>
+                            <li key={todo.id} style={{ textDecoration: todo.complete ? 'line-through' : "",
+                                backgroundColor: todo.complete ? '#b1daf0' : ""}} 
+                                onClick={() => this.toggleComplete(todo.id)}>
+                                <div>
+                                    {todo.text}
+                                    <button className="btn-sm btn-danger" onClick={() => this.handleDeleteTodo(todo.id)} style={{float: 'right'}}>X</button>
+                                </div>
+                            </li>
+                            <ul>
+                                {todo.subActivities.map(todo => (
+                                    <li key={todo.id} style={{ textDecoration: todo.complete ? 'line-through' : "",
+                                    backgroundColor: todo.complete ? '#b1daf0' : ""}} 
+                                    onClick={() => this.toggleSubComplete(todo.id)}>
+                                        <div>
+                                            {todo.text}
+                                            <button className="btn-sm btn-danger" onClick={() => this.handleDeleteSubTodo(todo.id)} style={{float: 'right'}}>X</button>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            {/* <Todo 
+                                key={todo.id} 
+                                toggleComplete={() => this.toggleComplete(todo.id)} 
+                                toggleSubItem={(id) => this.toggleSubComplete(id)}
+                                onDelete={() => this.handleDeleteTodo(todo.id)}
+                                todo={todo}
+                            /> */}
+                        </ul>
+                    ))}
+                </div>
                 <div>
                     todos left: {this.state.todos.filter(todo => !todo.complete).length}
                 </div>

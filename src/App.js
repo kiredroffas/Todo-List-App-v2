@@ -6,9 +6,10 @@ function App() {
   return (
     <div className="App">
       <div className="container-fluid">
-        <nav class="navbar navbar-light bg-light">
-          <span class="navbar-brand mb-0 h1">Todo List v.2, Now with React!</span>
+        <nav className="navbar navbar-light bg-light">
+          <span className="navbar-brand mb-0 h1" style={{fontSize: '30px'}}>Todo List v.2, Now with React!</span>
         </nav>
+        <br/>
         <TodoList />
       </div>
     </div>
