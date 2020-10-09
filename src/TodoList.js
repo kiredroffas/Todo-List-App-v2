@@ -23,8 +23,10 @@ export default class TodoList extends React.Component {
         this.removeCompletedTodos = this.removeCompletedTodos.bind(this);
         this.toggleAllTodos = this.toggleAllTodos.bind(this);
         this.toggleEditTodo = this.toggleEditTodo.bind(this);
+        this.toggleEditSubTodo = this.toggleEditSubTodo.bind(this);
         this.resetBeingEdited = this.resetBeingEdited.bind(this);
         this.editTodo = this.editTodo.bind(this);
+        this.editSubTodo = this.editSubTodo.bind(this);
     }
     
     addTodo(todo) {
@@ -58,9 +60,9 @@ export default class TodoList extends React.Component {
         let todoCopy = this.state.todos.slice();
         
         for(let todo of todoCopy) {
-            console.log(todo)
+            // console.log(todo)
             for(let subTodo of todo.subActivities) {
-                console.log(subTodo.id)
+                // console.log(subTodo.id)
                 if(subTodo.id === id) {
                     subTodo.complete = !subTodo.complete;
                     break;
@@ -121,21 +123,20 @@ export default class TodoList extends React.Component {
     }
 
     resetBeingEdited() {
-        this.setState(state => ({
-            todos: state.todos.map(todo => {
-                if(todo.beingEdited) {
-                    return {
-                        ...todo,
-                        beingEdited: false
-                    }
-                }
-                else {
-                    return todo;
-                }
-            }),
+        let todoCopy = this.state.todos.slice();
+        console.log("resetting")
+        for(let todo of todoCopy) {
+            console.log(todo)
+            todo.beingEdited = false;
+            for(let subTodo of todo.subActivities) {
+                subTodo.beingEdited = false;
+            }
+        }
+
+        this.setState({
+            todos: todoCopy,
             editMode: false
-        }))
-        
+        })
     }
 
     toggleEditTodo(id) {
@@ -160,6 +161,28 @@ export default class TodoList extends React.Component {
         }
     }
 
+    toggleEditSubTodo(subId) {
+        if(this.state.editMode) {
+            this.resetBeingEdited();
+        }
+        else {
+            let todoCopy = this.state.todos.slice();
+        
+            for(let todo of todoCopy) {
+                for(let subTodo of todo.subActivities) {
+                    if(subTodo.id === subId) {
+                        subTodo.beingEdited = true;
+                    }
+                }
+            }
+
+            this.setState({
+                todos: todoCopy,
+                editMode: true
+            })
+        }
+    }
+
     editTodo(id, newText) {
         this.setState(state => ({
             todos: state.todos.map(todo => {
@@ -173,7 +196,23 @@ export default class TodoList extends React.Component {
                     return todo;
                 }
             })
-        }))
+        }), () => this.resetBeingEdited())
+    }
+
+    editSubTodo(subId, newText) {
+        let todoCopy = this.state.todos.slice();
+        
+        for(let todo of todoCopy) {
+            for(let subTodo of todo.subActivities) {
+                if(subTodo.id === subId) {
+                    subTodo.text = newText;
+                }
+            }
+        }
+
+        this.setState({
+            todos: todoCopy
+        }, () => this.resetBeingEdited())
     }
 
     render() {
@@ -196,7 +235,9 @@ export default class TodoList extends React.Component {
                     todos={todos} 
                     editMode={this.state.editMode}
                     onToggleEditTodo={(id) => this.toggleEditTodo(id)}
+                    onToggleEditSubTodo={(subId) => this.toggleEditSubTodo(subId)}
                     onEditTodo={(id, newText) => this.editTodo(id, newText)}
+                    onEditSubTodo={(subId, newText) => this.editSubTodo(subId, newText)}
                     onResetBeingEdited={() => this.resetBeingEdited()}
                     onToggleComplete={(id) => this.toggleComplete(id)}
                     onToggleSubComplete={(subId) => this.toggleSubComplete(subId)}
