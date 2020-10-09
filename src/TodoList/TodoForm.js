@@ -56,7 +56,8 @@ export default class TodoForm extends React.Component {
     render() {
         return (
             <div>
-                <p>Add subtasks by separating input with a "|"!</p>
+                <br/>
+                <p style={{ color: 'white'}}>Add subtasks by separating input with a "|"!</p>
                 <form onSubmit={this.handleSubmit}>
                     <input 
                         name="text"
@@ -66,7 +67,7 @@ export default class TodoForm extends React.Component {
                     </input>
                     <button className="btn btn-primary" onClick={this.handleSubmit}>Add Todo</button>
                 </form>
-                <p><em>By Kiredroffas</em></p>
+                <p style={{ color: 'white'}}><em>By Kiredroffas</em></p>
             </div>
         )
     }

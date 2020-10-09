@@ -7,7 +7,6 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <br/>
       <div className="container-fluid">
         <TodoList />
       </div>

@@ -6,7 +6,7 @@ export default class TodoOptions extends React.Component {
     render() {
         return (
                 <div>
-                    <div>
+                    <div style={{ color: 'white'}}>
                         todos left: {this.props.todos.filter(todo => !todo.complete).length}
                     </div>
                     <div>
