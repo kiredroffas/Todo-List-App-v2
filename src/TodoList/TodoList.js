@@ -2,7 +2,7 @@ import React from 'react';
 import './TodoList.css';
 import TodoForm from './TodoForm.js';
 import TodoItems from './TodoItems.js';
-import TodoOptions from './TodoOptions';
+import TodoOptions from './TodoOptions.js';
 
 export default class TodoList extends React.Component {
     constructor(props) {

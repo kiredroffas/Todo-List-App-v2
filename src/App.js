@@ -1,15 +1,14 @@
 import React from 'react';
 import './App.css';
-import TodoList from './TodoList';
+import Header from './Header/Header.js';
+import TodoList from './TodoList/TodoList.js';
 
 function App() {
   return (
     <div className="App">
+      <Header />
+      <br/>
       <div className="container-fluid">
-        <nav className="navbar navbar-light bg-light">
-          <span className="navbar-brand mb-0 h1" style={{fontSize: '30px'}}>Todo List v.2, Now with React!</span>
-        </nav>
-        <br/>
         <TodoList />
       </div>
     </div>
