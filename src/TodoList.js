@@ -10,7 +10,8 @@ export default class TodoList extends React.Component {
         this.state = {
             todos: [],
             todoToShow: "all",
-            toggleAllComplete: true
+            toggleAllComplete: true,
+            editMode: false
         };
 
         this.addTodo = this.addTodo.bind(this);
@@ -21,6 +22,9 @@ export default class TodoList extends React.Component {
         this.handleDeleteSubTodo = this.handleDeleteSubTodo.bind(this);
         this.removeCompletedTodos = this.removeCompletedTodos.bind(this);
         this.toggleAllTodos = this.toggleAllTodos.bind(this);
+        this.toggleEditTodo = this.toggleEditTodo.bind(this);
+        this.resetBeingEdited = this.resetBeingEdited.bind(this);
+        this.editTodo = this.editTodo.bind(this);
     }
     
     addTodo(todo) {
@@ -116,6 +120,62 @@ export default class TodoList extends React.Component {
         })
     }
 
+    resetBeingEdited() {
+        this.setState(state => ({
+            todos: state.todos.map(todo => {
+                if(todo.beingEdited) {
+                    return {
+                        ...todo,
+                        beingEdited: false
+                    }
+                }
+                else {
+                    return todo;
+                }
+            }),
+            editMode: false
+        }))
+        
+    }
+
+    toggleEditTodo(id) {
+        if(this.state.editMode) {
+            this.resetBeingEdited();
+        }
+        else {
+            this.setState(state => ({
+                todos: state.todos.map(todo => {
+                    if(todo.id === id) {
+                        return {
+                            ...todo,
+                            beingEdited: true
+                        }
+                    }
+                    else {
+                        return todo;
+                    }
+                }),
+                editMode: true
+            }))
+        }
+    }
+
+    editTodo(id, newText) {
+        this.setState(state => ({
+            todos: state.todos.map(todo => {
+                if(todo.id === id) {
+                    return {
+                        ...todo,
+                        text: newText
+                    }
+                }
+                else {
+                    return todo;
+                }
+            })
+        }))
+    }
+
     render() {
         let todos = [];
 
@@ -134,9 +194,13 @@ export default class TodoList extends React.Component {
                 <TodoForm onSubmit={this.addTodo}/>
                 <TodoItems 
                     todos={todos} 
+                    editMode={this.state.editMode}
+                    onToggleEditTodo={(id) => this.toggleEditTodo(id)}
+                    onEditTodo={(id, newText) => this.editTodo(id, newText)}
+                    onResetBeingEdited={() => this.resetBeingEdited()}
                     onToggleComplete={(id) => this.toggleComplete(id)}
-                    onHandleDeleteTodo={(id) => this.handleDeleteTodo(id)}
                     onToggleSubComplete={(subId) => this.toggleSubComplete(subId)}
+                    onHandleDeleteTodo={(id) => this.handleDeleteTodo(id)}
                     onHandleDeleteSubTodo={(subId) => this.handleDeleteSubTodo(subId)}
                 />
                 <TodoOptions 

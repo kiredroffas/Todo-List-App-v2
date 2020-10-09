@@ -25,24 +25,26 @@ export default class TodoForm extends React.Component {
         // TODO: Max 125 chars?
         if (this.state.text !== "") {
             const arr = this.state.text.split("|");
-            const first = arr[0];
+            const primaryTodo = arr[0];
 
-            const subActivities = [];
+            const subTodos = [];
             if(arr.length > 1) {
                 for(let i=1; i < arr.length; i++) {
-                    subActivities.push({
+                    subTodos.push({
                         id: shortid.generate(), 
                         text: arr[i], 
-                        complete: false
+                        complete: false,
+                        beingEdited: false
                     })          
                 }
             }
 
             this.props.onSubmit({
                 id: shortid.generate(),
-                text: first,
+                text: primaryTodo,
                 complete: false,
-                subActivities: subActivities
+                subActivities: subTodos,
+                beingEdited: false
             });
 
             this.setState({

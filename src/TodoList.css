@@ -1,15 +1,21 @@
 .btn-sm {
-    padding: 2px 4px;
-    font-size: 10px;
+    padding: 2px 10px;
+    font-size: 15px;
     border-radius: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .button {
     margin: 1em auto;
     padding: 1em auto;
     position: relative;
+}
+
+.pencil-icon {
+    padding: 0px 0px;
+    font-size: 15px;
+    border-radius: 10px;
 }
 
 li { 
